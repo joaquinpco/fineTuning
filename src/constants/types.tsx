@@ -1,1 +1,5 @@
-export type tModel = "fill-mask" | "question-answering" | "summarization";
+export type tModel =
+  | "fill-mask"
+  | "question-answering"
+  | "summarization"
+  | "translation";

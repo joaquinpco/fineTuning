@@ -42,6 +42,18 @@ export const MODELS: iModels = {
       </IonList>
     );
   },
+  translation: async (sentence: string) => {
+    const pipe = await pipeline("translation_en_to_fr", "Xenova/t5-small");
+
+    const response = await pipe(sentence);
+
+    const { translation_text } = response[0];
+    return (
+      <IonList>
+        <IonItem>{translation_text}</IonItem>
+      </IonList>
+    );
+  },
   summarization: async (sentence: string) => {
     const pipe = await pipeline("summarization", "Xenova/distilbart-cnn-6-6");
 
@@ -63,6 +75,7 @@ export const NAME_MODELS = [
   },
   { name: "Question-Answering", value: "question-answering" },
   { name: "Summarization", value: "summarization" },
+  { name: "Translation", value: "translation" },
 ];
 
 export const TYPES_CONTENT = {
