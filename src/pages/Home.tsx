@@ -5,21 +5,32 @@ import {
   IonTitle,
   IonToolbar,
   IonSelect,
+  IonButtons,
+  IonMenuButton,
   IonSelectOption,
   IonInput,
   useIonLoading,
 } from "@ionic/react";
 
-import { useState, createElement } from "react";
+import { createElement, useState, useEffect } from "react";
 
-import { MODELS, NAME_MODELS } from "../constants/constants";
+import { Menu } from "../components/Menu";
+
+import {
+  MODELS,
+  NAME_MODELS,
+  HOME_CONTENT,
+  TYPES_CONTENT,
+} from "../constants/constants";
 
 import { tModel } from "../constants/types";
+
+import { getContent } from "../utils/get-content";
 
 import "./Home.css";
 
 const Home: React.FC = () => {
-  const [results, setResults] = useState<any>(createElement("div"));
+  const [results, setResults] = useState<any>(<></>);
 
   const [present, dismiss] = useIonLoading();
 
@@ -43,33 +54,32 @@ const Home: React.FC = () => {
     setSentence(formatSentence);
   };
 
+  const [typeContent, setTypeContent] = useState<string>(
+    TYPES_CONTENT.NATURAL_LANGUAGE_PROCESSING
+  );
+
+  useEffect(() => {
+    setResults(<></>);
+  }, [typeContent]);
+
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Fine Tuning</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen className="content">
-        <IonInput
-          onIonChange={(e) => handlerSentence(e.detail.value)}
-        ></IonInput>
-        <IonSelect
-          label="Models to choose"
-          placeholder="..."
-          onIonChange={(e) => useModel(e.detail.value)}
-        >
-          {NAME_MODELS.map((item, index) => {
-            return (
-              <IonSelectOption key={index} value={item.value}>
-                {item.name}
-              </IonSelectOption>
-            );
-          })}
-        </IonSelect>
-        {results}
-      </IonContent>
-    </IonPage>
+    <>
+      <Menu contentId="home_content" setTypeContent={setTypeContent}></Menu>
+      <IonPage id="home_content">
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonMenuButton></IonMenuButton>
+            </IonButtons>
+            <IonTitle>Fine Tuning</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent fullscreen className="content">
+          {getContent(typeContent, handlerSentence, useModel)}
+          {results}
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
 

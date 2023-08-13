@@ -1,8 +1,14 @@
-import { IonList, IonItem } from "@ionic/react";
+import {
+  IonList,
+  IonItem,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+} from "@ionic/react";
 
 import { pipeline } from "@xenova/transformers";
 
-import { iModels } from "./interfaces";
+import { iModels, iHomeContent } from "./interfaces";
 
 export const MODELS: iModels = {
   "fill-mask": async (sentence: string) => {
@@ -58,3 +64,46 @@ export const NAME_MODELS = [
   { name: "Question-Answering", value: "question-answering" },
   { name: "Summarization", value: "summarization" },
 ];
+
+export const TYPES_CONTENT = {
+  NATURAL_LANGUAGE_PROCESSING: "NATURAL_LANGUAGE_PROCESSING",
+  VISION: "VISION",
+  AUDIO: "AUDIO",
+  MULTIMODAL: "MULTIMODAL",
+};
+
+export const HOME_CONTENT: iHomeContent = {
+  NATURAL_LANGUAGE_PROCESSING: ({
+    handlerSentence = (param: any) => {},
+    useModel = (param: any) => {},
+    NAME_MODELS = new Array<{ value: string; name: string }>(),
+  } = {}) => {
+    return (
+      <>
+        <IonInput onIonChange={(e) => handlerSentence(e.detail.value)} />
+        <IonSelect
+          label="Models to choose"
+          placeholder="..."
+          onIonChange={(e) => useModel(e.detail.value)}
+        >
+          {NAME_MODELS.map((item, index) => {
+            return (
+              <IonSelectOption key={index} value={item.value}>
+                {item.name}
+              </IonSelectOption>
+            );
+          })}
+        </IonSelect>
+      </>
+    );
+  },
+  VISION: () => {
+    return <></>;
+  },
+  AUDIO: () => {
+    return <></>;
+  },
+  MULTIMODAL: () => {
+    return <></>;
+  },
+};
