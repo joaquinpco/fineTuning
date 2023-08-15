@@ -3,6 +3,7 @@ export interface iModels {
   "question-answering": Function;
   translation: Function;
   summarization: Function;
+  "object-detection": Function;
 }
 
 export interface iHomeContent {

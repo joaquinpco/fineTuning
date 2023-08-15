@@ -1,10 +1,13 @@
 import { TYPES_CONTENT } from "../constants/constants";
 import { HOME_CONTENT } from "../constants/constants";
-import { NAME_MODELS } from "../constants/constants";
+import {
+  NAME_MODELS_NATURAL_LANGUAGE_PROCESING,
+  NAME_MODELS_VISION,
+} from "../constants/constants";
 
 export const getContent = (
   typeContent: string,
-  handlerSentence: Function,
+  handler: Function,
   useModel: Function
 ) => {
   let content = <></>;
@@ -12,9 +15,18 @@ export const getContent = (
     case TYPES_CONTENT.NATURAL_LANGUAGE_PROCESSING:
       {
         content = HOME_CONTENT.NATURAL_LANGUAGE_PROCESSING({
-          handlerSentence,
+          handler: handler,
           useModel,
-          NAME_MODELS,
+          NAME_MODELS: NAME_MODELS_NATURAL_LANGUAGE_PROCESING,
+        });
+      }
+      break;
+    case TYPES_CONTENT.VISION:
+      {
+        content = HOME_CONTENT.VISION({
+          handler: handler,
+          useModel,
+          NAME_MODELS: NAME_MODELS_VISION,
         });
       }
       break;

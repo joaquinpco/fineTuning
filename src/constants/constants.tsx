@@ -6,7 +6,7 @@ import {
   IonSelectOption,
 } from "@ionic/react";
 
-import { pipeline } from "@xenova/transformers";
+import { pipeline, RawImage } from "@xenova/transformers";
 
 import { iModels, iHomeContent } from "./interfaces";
 
@@ -66,9 +66,46 @@ export const MODELS: iModels = {
       </IonList>
     );
   },
+  "object-detection": (files: FileList) => {
+    const file = files[0];
+    console.log(file);
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const blob = new Blob([new Uint8Array(e.target.result)], {
+            type: file.type,
+          });
+          console.log(blob);
+          const pipe = await pipeline(
+            "object-detection",
+            "Xenova/detr-resnet-50"
+          );
+          const response = await pipe(await RawImage.fromBlob(blob));
+          console.log(response);
+
+          resolve(
+            <IonList>
+              {response.map((item: any, index: number) => {
+                return (
+                  <IonItem key={index}>
+                    Label: {item.label}, Score: {item.score}
+                  </IonItem>
+                );
+              })}
+            </IonList>
+          );
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  },
 };
 
-export const NAME_MODELS = [
+export const NAME_MODELS_NATURAL_LANGUAGE_PROCESING = [
   {
     name: "Fill-Mask",
     value: "fill-mask",
@@ -76,6 +113,13 @@ export const NAME_MODELS = [
   { name: "Question-Answering", value: "question-answering" },
   { name: "Summarization", value: "summarization" },
   { name: "Translation", value: "translation" },
+];
+
+export const NAME_MODELS_VISION = [
+  {
+    name: "Object detection",
+    value: "object-detection",
+  },
 ];
 
 export const TYPES_CONTENT = {
@@ -87,13 +131,13 @@ export const TYPES_CONTENT = {
 
 export const HOME_CONTENT: iHomeContent = {
   NATURAL_LANGUAGE_PROCESSING: ({
-    handlerSentence = (param: any) => {},
+    handler = (param: any) => {},
     useModel = (param: any) => {},
     NAME_MODELS = new Array<{ value: string; name: string }>(),
   } = {}) => {
     return (
       <>
-        <IonInput onIonChange={(e) => handlerSentence(e.detail.value)} />
+        <IonInput onIonChange={(e) => handler(e.detail.value)} />
         <IonSelect
           label="Models to choose"
           placeholder="..."
@@ -110,8 +154,29 @@ export const HOME_CONTENT: iHomeContent = {
       </>
     );
   },
-  VISION: () => {
-    return <></>;
+  VISION: ({
+    handler = (param: any) => {},
+    useModel = (param: any) => {},
+    NAME_MODELS = new Array<{ value: string; name: string }>(),
+  } = {}) => {
+    return (
+      <>
+        <input type="file" onChange={(e) => handler(e.target.files)} />
+        <IonSelect
+          label="Models to choose"
+          placeholder="..."
+          onIonChange={(e) => useModel(e.detail.value)}
+        >
+          {NAME_MODELS.map((item, index) => {
+            return (
+              <IonSelectOption key={index} value={item.value}>
+                {item.name}
+              </IonSelectOption>
+            );
+          })}
+        </IonSelect>
+      </>
+    );
   },
   AUDIO: () => {
     return <></>;

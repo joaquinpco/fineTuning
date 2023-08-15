@@ -4,11 +4,8 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonSelect,
   IonButtons,
   IonMenuButton,
-  IonSelectOption,
-  IonInput,
   useIonLoading,
 } from "@ionic/react";
 
@@ -16,22 +13,18 @@ import { createElement, useState, useEffect } from "react";
 
 import { Menu } from "../components/Menu";
 
-import {
-  MODELS,
-  NAME_MODELS,
-  HOME_CONTENT,
-  TYPES_CONTENT,
-} from "../constants/constants";
+import { MODELS, TYPES_CONTENT } from "../constants/constants";
 
 import { tModel } from "../constants/types";
 
 import { getContent } from "../utils/get-content";
 
 import "./Home.css";
+import { ObjectDetectionPipeline } from "@xenova/transformers";
 
 const Home: React.FC = () => {
   const [results, setResults] = useState<any>(<></>);
-
+  const [receiver, setReceiver] = useState<any>();
   const [present, dismiss] = useIonLoading();
 
   const useModel = async (model: tModel) => {
@@ -40,18 +33,17 @@ const Home: React.FC = () => {
       present({
         message: "Fine tuning model, please wait...",
       });
-      setResults(await selectedModel(sentence));
+      setResults(await selectedModel(receiver));
     } catch (error) {
+      console.error(error);
     } finally {
       dismiss();
     }
   };
 
-  const [sentence, setSentence] = useState<string>("");
-  const handlerSentence = (sentence: string | undefined | null) => {
-    let formatSentence: string =
-      sentence === null || sentence === undefined ? "" : sentence;
-    setSentence(formatSentence);
+  const handler = (receiver: any) => {
+    console.log(receiver);
+    setReceiver(receiver);
   };
 
   const [typeContent, setTypeContent] = useState<string>(
@@ -75,7 +67,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="content">
-          {getContent(typeContent, handlerSentence, useModel)}
+          {getContent(typeContent, handler, useModel)}
           {results}
         </IonContent>
       </IonPage>
