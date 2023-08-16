@@ -139,6 +139,42 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
+  "image-segmentation": (files: FileList) => {
+    const file = files[0];
+    console.log(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const blob = new Blob([new Uint8Array(e.target.result)], {
+            type: file.type,
+          });
+          console.log(blob);
+          const pipe = await pipeline(
+            "image-segmentation",
+            "Xenova/detr-resnet-50-panoptic"
+          );
+          const response = await pipe(await RawImage.fromBlob(blob));
+          console.log(response);
+
+          resolve(
+            <IonList>
+              {response.map((item: any, index: number) => {
+                return (
+                  <IonItem key={index}>
+                    Label: {item.label}, Mask: {item.score}
+                  </IonItem>
+                );
+              })}
+            </IonList>
+          );
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  },
 };
 
 export const NAME_MODELS_NATURAL_LANGUAGE_PROCESING = [
@@ -159,6 +195,10 @@ export const NAME_MODELS_VISION = [
   {
     name: "Image classification",
     value: "image-classification",
+  },
+  {
+    name: "Image Segmentation",
+    value: "image-segmentation",
   },
 ];
 

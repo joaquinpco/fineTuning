@@ -5,6 +5,7 @@ export interface iModels {
   summarization: Function;
   "object-detection": Function;
   "image-classification": Function;
+  "image-segmentation": Function;
 }
 
 export interface iHomeContent {
