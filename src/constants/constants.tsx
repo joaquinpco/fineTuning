@@ -103,6 +103,42 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
+  "image-classification": (files: FileList) => {
+    const file = files[0];
+    console.log(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const blob = new Blob([new Uint8Array(e.target.result)], {
+            type: file.type,
+          });
+          console.log(blob);
+          const pipe = await pipeline(
+            "image-classification",
+            "Xenova/vit-base-patch16-224"
+          );
+          const response = await pipe(await RawImage.fromBlob(blob));
+          console.log(response);
+
+          resolve(
+            <IonList>
+              {response.map((item: any, index: number) => {
+                return (
+                  <IonItem key={index}>
+                    Label: {item.label}, Score: {item.score}
+                  </IonItem>
+                );
+              })}
+            </IonList>
+          );
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  },
 };
 
 export const NAME_MODELS_NATURAL_LANGUAGE_PROCESING = [
@@ -119,6 +155,17 @@ export const NAME_MODELS_VISION = [
   {
     name: "Object detection",
     value: "object-detection",
+  },
+  {
+    name: "Image classification",
+    value: "image-classification",
+  },
+];
+
+export const NAME_MODELS_AUDIO = [
+  {
+    name: "Automatic speech recognition",
+    value: "automatic-speech-recognition",
   },
 ];
 

@@ -9,7 +9,7 @@ import {
   useIonLoading,
 } from "@ionic/react";
 
-import { createElement, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Menu } from "../components/Menu";
 
@@ -20,7 +20,6 @@ import { tModel } from "../constants/types";
 import { getContent } from "../utils/get-content";
 
 import "./Home.css";
-import { ObjectDetectionPipeline } from "@xenova/transformers";
 
 const Home: React.FC = () => {
   const [results, setResults] = useState<any>(<></>);

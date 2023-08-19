@@ -3,4 +3,6 @@ export type tModel =
   | "question-answering"
   | "summarization"
   | "translation"
-  | "object-detection";
+  | "object-detection"
+  | "image-classification"
+  | "automatic-speech-recognition";
