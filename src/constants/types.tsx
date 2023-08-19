@@ -5,4 +5,4 @@ export type tModel =
   | "translation"
   | "object-detection"
   | "image-classification"
-  | "image-segmentation";
+  | "automatic-speech-recognition";
