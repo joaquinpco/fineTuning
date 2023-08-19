@@ -139,6 +139,38 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
+  "automatic-speech-recognition": (files: FileList) => {
+    const file = files[0];
+    console.log(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const pipe = await pipeline(
+            "automatic-speech-recognition",
+            "Xenova/whisper-tiny.en"
+          );
+
+          const blob = new Blob([new Uint8Array(e.target.result)], {
+            type: file.type,
+          });
+          console.log(blob);
+          var blobUrl = URL.createObjectURL(blob);
+          const response = await pipe(blobUrl);
+          console.log(response);
+
+          resolve(
+            <IonList>
+              <IonItem key="0">Label: {response.text}</IonItem>;
+            </IonList>
+          );
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  },
 };
 
 export const NAME_MODELS_NATURAL_LANGUAGE_PROCESING = [
@@ -225,8 +257,29 @@ export const HOME_CONTENT: iHomeContent = {
       </>
     );
   },
-  AUDIO: () => {
-    return <></>;
+  AUDIO: ({
+    handler = (param: any) => {},
+    useModel = (param: any) => {},
+    NAME_MODELS = new Array<{ value: string; name: string }>(),
+  } = {}) => {
+    return (
+      <>
+        <input type="file" onChange={(e) => handler(e.target.files)} />
+        <IonSelect
+          label="Models to choose"
+          placeholder="..."
+          onIonChange={(e) => useModel(e.detail.value)}
+        >
+          {NAME_MODELS.map((item, index) => {
+            return (
+              <IonSelectOption key={index} value={item.value}>
+                {item.name}
+              </IonSelectOption>
+            );
+          })}
+        </IonSelect>
+      </>
+    );
   },
   MULTIMODAL: () => {
     return <></>;
