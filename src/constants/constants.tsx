@@ -171,6 +171,83 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
+  "image-to-text": (files: FileList) => {
+    const file = files[0];
+    console.log(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const blob = new Blob([new Uint8Array(e.target.result)], {
+            type: file.type,
+          });
+          console.log(blob);
+          const pipe = await pipeline(
+            "image-to-text",
+            "Xenova/vit-gpt2-image-captioning"
+          );
+          const response = await pipe(await RawImage.fromBlob(blob));
+          console.log(response);
+
+          resolve(
+            <IonList>
+              {response.map((item: any, index: number) => {
+                return (
+                  <IonItem key={index}>
+                    Image description: {item.generated_text}
+                  </IonItem>
+                );
+              })}
+            </IonList>
+          );
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  },
+  "zero-shot-image-classification": (files: FileList) => {
+    const file = files[0];
+    console.log(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const blob = new Blob([new Uint8Array(e.target.result)], {
+            type: file.type,
+          });
+          console.log(blob);
+          const pipe = await pipeline("zero-shot-image-classification");
+          const labels_for_classification = [
+            "cat and dog",
+            "lion and cheetah",
+            "rabbit and lion",
+          ];
+          const response = await pipe(
+            await RawImage.fromBlob(blob),
+            labels_for_classification
+          );
+          console.log(response);
+
+          resolve(
+            <IonList>
+              {response.map((item: any, index: number) => {
+                return (
+                  <IonItem key={index}>
+                    Score: {item.score} Label: {item.label}
+                  </IonItem>
+                );
+              })}
+            </IonList>
+          );
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  },
 };
 
 export const NAME_MODELS_NATURAL_LANGUAGE_PROCESING = [
@@ -198,6 +275,17 @@ export const NAME_MODELS_AUDIO = [
   {
     name: "Automatic speech recognition",
     value: "automatic-speech-recognition",
+  },
+];
+
+export const NAME_MODELS_MULTIMODAL = [
+  {
+    name: "Image to Text",
+    value: "image-to-text",
+  },
+  {
+    name: "Zero-Shot Image Classification",
+    value: "zero-shot-image-classification",
   },
 ];
 
@@ -281,7 +369,28 @@ export const HOME_CONTENT: iHomeContent = {
       </>
     );
   },
-  MULTIMODAL: () => {
-    return <></>;
+  MULTIMODAL: ({
+    handler = (param: any) => {},
+    useModel = (param: any) => {},
+    NAME_MODELS = new Array<{ value: string; name: string }>(),
+  } = {}) => {
+    return (
+      <>
+        <input type="file" onChange={(e) => handler(e.target.files)} />
+        <IonSelect
+          label="Models to choose"
+          placeholder="..."
+          onIonChange={(e) => useModel(e.detail.value)}
+        >
+          {NAME_MODELS.map((item, index) => {
+            return (
+              <IonSelectOption key={index} value={item.value}>
+                {item.name}
+              </IonSelectOption>
+            );
+          })}
+        </IonSelect>
+      </>
+    );
   },
 };
