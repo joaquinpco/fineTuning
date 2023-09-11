@@ -1,4 +1,8 @@
-import { TYPES_CONTENT } from "../constants/constants";
+import {
+  NAME_MODELS_AUDIO,
+  NAME_MODELS_MULTIMODAL,
+  TYPES_CONTENT,
+} from "../constants/constants";
 import { HOME_CONTENT } from "../constants/constants";
 import {
   NAME_MODELS_NATURAL_LANGUAGE_PROCESING,
@@ -27,6 +31,24 @@ export const getContent = (
           handler: handler,
           useModel,
           NAME_MODELS: NAME_MODELS_VISION,
+        });
+      }
+      break;
+    case TYPES_CONTENT.AUDIO:
+      {
+        content = HOME_CONTENT.AUDIO({
+          handler: handler,
+          useModel,
+          NAME_MODELS: NAME_MODELS_AUDIO,
+        });
+      }
+      break;
+    case TYPES_CONTENT.MULTIMODAL:
+      {
+        content = HOME_CONTENT.MULTIMODAL({
+          handler: handler,
+          useModel,
+          NAME_MODELS: NAME_MODELS_MULTIMODAL,
         });
       }
       break;

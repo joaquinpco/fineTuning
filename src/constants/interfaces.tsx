@@ -6,6 +6,8 @@ export interface iModels {
   "object-detection": Function;
   "image-classification": Function;
   "automatic-speech-recognition": Function;
+  "image-to-text": Function;
+  "zero-shot-image-classification": Function;
 }
 
 export interface iHomeContent {
