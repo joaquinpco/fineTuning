@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: 'esnext', // you can also use 'es2020' here
+    outDir: 'build',
   },
   optimizeDeps: {
     esbuildOptions: {
