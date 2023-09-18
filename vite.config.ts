@@ -4,13 +4,12 @@ import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    legacy()
-  ],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
-  }
+  build: {
+    target: 'esnext', // you can also use 'es2020' here
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext', // you can also use 'es2020' here
+    },
+  },
 })
