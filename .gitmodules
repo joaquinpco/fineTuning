@@ -1,0 +1,24 @@
+[submodule "public/models/Xenova/bert-base-uncased"]
+	path = public/models/Xenova/bert-base-uncased
+	url = https://huggingface.co/Xenova/bert-base-uncased
+[submodule "public/models/Xenova/distilbert-base-cased-distilled-squad"]
+	path = public/models/Xenova/distilbert-base-cased-distilled-squad
+	url = https://huggingface.co/Xenova/distilbert-base-cased-distilled-squad
+[submodule "public/models/Xenova/t5-small"]
+	path = public/models/Xenova/t5-small
+	url = https://huggingface.co/Xenova/t5-small
+[submodule "public/models/Xenova/distilbart-cnn-6-6"]
+	path = public/models/Xenova/distilbart-cnn-6-6
+	url = https://huggingface.co/Xenova/distilbart-cnn-6-6
+[submodule "public/models/Xenova/detr-resnet-50"]
+	path = public/models/Xenova/detr-resnet-50
+	url = https://huggingface.co/Xenova/detr-resnet-50
+[submodule "public/models/Xenova/vit-base-patch16-224"]
+	path = public/models/Xenova/vit-base-patch16-224
+	url = https://huggingface.co/Xenova/vit-base-patch16-224
+[submodule "public/models/Xenova/whisper-tiny.en"]
+	path = public/models/Xenova/whisper-tiny.en
+	url = https://huggingface.co/Xenova/whisper-tiny.en
+[submodule "public/models/Xenova/vit-gpt2-image-captioning"]
+	path = public/models/Xenova/vit-gpt2-image-captioning
+	url = https://huggingface.co/Xenova/vit-gpt2-image-captioning
