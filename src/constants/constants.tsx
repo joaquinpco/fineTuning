@@ -4,15 +4,15 @@ import {
   IonInput,
   IonSelect,
   IonSelectOption,
-} from "@ionic/react";
+} from '@ionic/react';
 
-import { pipeline, RawImage } from "@xenova/transformers";
+import { pipeline, RawImage } from '@xenova/transformers';
 
-import { iModels, iHomeContent } from "./interfaces";
+import { iModels, iHomeContent } from './interfaces';
 
 export const MODELS: iModels = {
-  "fill-mask": async (sentence: string) => {
-    const pipe = await pipeline("fill-mask", "Xenova/bert-base-uncased");
+  'fill-mask': async (sentence: string) => {
+    const pipe = await pipeline('fill-mask', 'Xenova/bert-base-uncased');
     const response = await pipe(sentence);
 
     return (
@@ -23,14 +23,14 @@ export const MODELS: iModels = {
       </IonList>
     );
   },
-  "question-answering": async (sentence: string) => {
+  'question-answering': async (sentence: string) => {
     const pipe = await pipeline(
-      "question-answering",
-      "Xenova/distilbert-base-cased-distilled-squad"
+      'question-answering',
+      'Xenova/distilbert-base-cased-distilled-squad'
     );
 
-    let arraySentence = sentence.split("?");
-    let question = arraySentence[0] + "?";
+    let arraySentence = sentence.split('?');
+    let question = arraySentence[0] + '?';
     let context = arraySentence[1];
     const response = await pipe(question, context);
 
@@ -43,7 +43,7 @@ export const MODELS: iModels = {
     );
   },
   translation: async (sentence: string) => {
-    const pipe = await pipeline("translation_en_to_fr", "Xenova/t5-small");
+    const pipe = await pipeline('translation_en_to_fr', 'Xenova/t5-small');
 
     const response = await pipe(sentence);
 
@@ -55,7 +55,7 @@ export const MODELS: iModels = {
     );
   },
   summarization: async (sentence: string) => {
-    const pipe = await pipeline("summarization", "Xenova/distilbart-cnn-6-6");
+    const pipe = await pipeline('summarization', 'Xenova/distilbart-cnn-6-6');
 
     const response = await pipe(sentence);
 
@@ -66,7 +66,7 @@ export const MODELS: iModels = {
       </IonList>
     );
   },
-  "object-detection": (files: FileList) => {
+  'object-detection': (files: FileList) => {
     const file = files[0];
     console.log(file);
 
@@ -79,8 +79,8 @@ export const MODELS: iModels = {
           });
           console.log(blob);
           const pipe = await pipeline(
-            "object-detection",
-            "Xenova/detr-resnet-50"
+            'object-detection',
+            'Xenova/detr-resnet-50'
           );
           const response = await pipe(await RawImage.fromBlob(blob));
           console.log(response);
@@ -103,7 +103,7 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
-  "image-classification": (files: FileList) => {
+  'image-classification': (files: FileList) => {
     const file = files[0];
     console.log(file);
     return new Promise((resolve, reject) => {
@@ -115,8 +115,8 @@ export const MODELS: iModels = {
           });
           console.log(blob);
           const pipe = await pipeline(
-            "image-classification",
-            "Xenova/vit-base-patch16-224"
+            'image-classification',
+            'Xenova/vit-base-patch16-224'
           );
           const response = await pipe(await RawImage.fromBlob(blob));
           console.log(response);
@@ -139,7 +139,7 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
-  "automatic-speech-recognition": (files: FileList) => {
+  'automatic-speech-recognition': (files: FileList) => {
     const file = files[0];
     console.log(file);
     return new Promise((resolve, reject) => {
@@ -147,8 +147,8 @@ export const MODELS: iModels = {
       reader.onload = async (e) => {
         try {
           const pipe = await pipeline(
-            "automatic-speech-recognition",
-            "Xenova/whisper-tiny.en"
+            'automatic-speech-recognition',
+            'Xenova/whisper-tiny.en'
           );
 
           const blob = new Blob([new Uint8Array(e.target.result)], {
@@ -161,7 +161,7 @@ export const MODELS: iModels = {
 
           resolve(
             <IonList>
-              <IonItem key="0">Label: {response.text}</IonItem>;
+              <IonItem key='0'>Label: {response.text}</IonItem>;
             </IonList>
           );
         } catch (error) {
@@ -171,7 +171,7 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
-  "image-to-text": (files: FileList) => {
+  'image-to-text': (files: FileList) => {
     const file = files[0];
     console.log(file);
     return new Promise((resolve, reject) => {
@@ -183,8 +183,8 @@ export const MODELS: iModels = {
           });
           console.log(blob);
           const pipe = await pipeline(
-            "image-to-text",
-            "Xenova/vit-gpt2-image-captioning"
+            'image-to-text',
+            'Xenova/vit-gpt2-image-captioning'
           );
           const response = await pipe(await RawImage.fromBlob(blob));
           console.log(response);
@@ -207,7 +207,7 @@ export const MODELS: iModels = {
       reader.readAsArrayBuffer(file);
     });
   },
-  "zero-shot-image-classification": (files: FileList) => {
+  'zero-shot-image-classification': (files: FileList) => {
     const file = files[0];
     console.log(file);
     return new Promise((resolve, reject) => {
@@ -218,11 +218,11 @@ export const MODELS: iModels = {
             type: file.type,
           });
           console.log(blob);
-          const pipe = await pipeline("zero-shot-image-classification");
+          const pipe = await pipeline('zero-shot-image-classification');
           const labels_for_classification = [
-            "cat and dog",
-            "lion and cheetah",
-            "rabbit and lion",
+            'cat and dog',
+            'lion and cheetah',
+            'rabbit and lion',
           ];
           const response = await pipe(
             await RawImage.fromBlob(blob),
@@ -252,48 +252,48 @@ export const MODELS: iModels = {
 
 export const NAME_MODELS_NATURAL_LANGUAGE_PROCESING = [
   {
-    name: "Fill-Mask",
-    value: "fill-mask",
+    name: 'Fill-Mask',
+    value: 'fill-mask',
   },
-  { name: "Question-Answering", value: "question-answering" },
-  { name: "Summarization", value: "summarization" },
-  { name: "Translation", value: "translation" },
+  { name: 'Question-Answering', value: 'question-answering' },
+  { name: 'Summarization', value: 'summarization' },
+  { name: 'Translation (English to French)', value: 'translation' },
 ];
 
 export const NAME_MODELS_VISION = [
   {
-    name: "Object detection",
-    value: "object-detection",
+    name: 'Object detection',
+    value: 'object-detection',
   },
   {
-    name: "Image classification",
-    value: "image-classification",
+    name: 'Image classification',
+    value: 'image-classification',
   },
 ];
 
 export const NAME_MODELS_AUDIO = [
   {
-    name: "Automatic speech recognition",
-    value: "automatic-speech-recognition",
+    name: 'Automatic speech recognition',
+    value: 'automatic-speech-recognition',
   },
 ];
 
 export const NAME_MODELS_MULTIMODAL = [
   {
-    name: "Image to Text",
-    value: "image-to-text",
+    name: 'Image to Text',
+    value: 'image-to-text',
   },
   {
-    name: "Zero-Shot Image Classification",
-    value: "zero-shot-image-classification",
+    name: 'Zero-Shot Image Classification',
+    value: 'zero-shot-image-classification',
   },
 ];
 
 export const TYPES_CONTENT = {
-  NATURAL_LANGUAGE_PROCESSING: "NATURAL_LANGUAGE_PROCESSING",
-  VISION: "VISION",
-  AUDIO: "AUDIO",
-  MULTIMODAL: "MULTIMODAL",
+  NATURAL_LANGUAGE_PROCESSING: 'NATURAL_LANGUAGE_PROCESSING',
+  VISION: 'VISION',
+  AUDIO: 'AUDIO',
+  MULTIMODAL: 'MULTIMODAL',
 };
 
 export const HOME_CONTENT: iHomeContent = {
@@ -306,8 +306,8 @@ export const HOME_CONTENT: iHomeContent = {
       <>
         <IonInput onIonChange={(e) => handler(e.detail.value)} />
         <IonSelect
-          label="Models to choose"
-          placeholder="..."
+          label='Models to choose'
+          placeholder='...'
           onIonChange={(e) => useModel(e.detail.value)}
         >
           {NAME_MODELS.map((item, index) => {
@@ -328,10 +328,10 @@ export const HOME_CONTENT: iHomeContent = {
   } = {}) => {
     return (
       <>
-        <input type="file" onChange={(e) => handler(e.target.files)} />
+        <input type='file' onChange={(e) => handler(e.target.files)} />
         <IonSelect
-          label="Models to choose"
-          placeholder="..."
+          label='Models to choose'
+          placeholder='...'
           onIonChange={(e) => useModel(e.detail.value)}
         >
           {NAME_MODELS.map((item, index) => {
@@ -352,10 +352,10 @@ export const HOME_CONTENT: iHomeContent = {
   } = {}) => {
     return (
       <>
-        <input type="file" onChange={(e) => handler(e.target.files)} />
+        <input type='file' onChange={(e) => handler(e.target.files)} />
         <IonSelect
-          label="Models to choose"
-          placeholder="..."
+          label='Models to choose'
+          placeholder='...'
           onIonChange={(e) => useModel(e.detail.value)}
         >
           {NAME_MODELS.map((item, index) => {
@@ -376,10 +376,10 @@ export const HOME_CONTENT: iHomeContent = {
   } = {}) => {
     return (
       <>
-        <input type="file" onChange={(e) => handler(e.target.files)} />
+        <input type='file' onChange={(e) => handler(e.target.files)} />
         <IonSelect
-          label="Models to choose"
-          placeholder="..."
+          label='Models to choose'
+          placeholder='...'
           onIonChange={(e) => useModel(e.detail.value)}
         >
           {NAME_MODELS.map((item, index) => {
