@@ -62,7 +62,7 @@ const Home: React.FC = () => {
             <IonButtons slot="start">
               <IonMenuButton></IonMenuButton>
             </IonButtons>
-            <IonTitle>Fine Tuning</IonTitle>
+            <IonTitle>Transformers</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen className="content">
